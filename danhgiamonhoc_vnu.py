@@ -34,10 +34,11 @@ def get_list_course_urls(sess):
 	urls = list(set(urls)) # remove duplicate
 	return urls
 
-def get_list_questionnaire_urls(sess, course_urls):
+def get_list_questionnaire_urls(sess):
 	if not isinstance(sess, requests.Session):
 		return False
 	questionnaire_urls = []
+	course_urls = get_list_course_urls(sess)
 	for url in course_urls:
 		source = sess.get(url).content
 		match_q = re.search('http.{20,30}mod/questionnaire/view.php\?id=\d+', source)
@@ -52,7 +53,7 @@ def get_list_questionnaire_urls(sess, course_urls):
 	return questionnaire_urls
 
 
-def complete_questionnaire_urls(sess, q_url, choice):
+def complete_questionnaire(sess, q_url, choice):
 	choice = int(choice) % 5
 	source = sess.get(q_url).content
 	data = {}
@@ -78,10 +79,9 @@ def dgmh(username, password, choice=4):
 	sess = login_course(username, password)
 	if not sess:
 		return False
-	course_urls = get_list_course_urls(sess)
-	questionnaire_urls = get_list_questionnaire_urls(sess, course_urls)
+	questionnaire_urls = get_list_questionnaire_urls(sess)
 	for q_url in questionnaire_urls:
-		complete_questionnaire_urls(sess, q_url)
+		complete_questionnaire(sess, q_url, choice)
 
 if __name__ == '__main__':
 	main()
