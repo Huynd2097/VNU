@@ -5,11 +5,11 @@ import re 	#regex
 import sys 	#input
 
 def main():
-	msv = ''
-	passwd = ''
-	listClassId = ['MAT1093 4', 'HIS1002 5', 'PHY1103 2']
+	msv = '15020907'
+	passwd = 'deadp00l'
+	listClassId = ['PES 1030', 'HIS1002 5', 'PHY1103 2']
 	dkmk = DkmhVnu(msv, passwd)
-	dkmk.changeClass('cancel', listClassId)
+	dkmk.changeClass('register', listClassId)
 	while dkmk.threadActive:
 		pass
 
@@ -62,14 +62,20 @@ class DkmhVnu(object):
 				token = match.group(1)
 			
 			#post data
-			data = {'__RequestVerificationToken' : token, 'loginName' : self.__loginName, 'password' : self.__password}
+			data = {
+				'__RequestVerificationToken' : token,
+				'loginName' : self.__loginName,
+				'password' : self.__password,
+			}
+
 			response = sess.post(self.urlLogin, data=data).text
 			if 'Sai t' in response:
-				return ''
+				return None
 			if 'Logout' in response:
 				
 				sess.headers.update({'referer': self.urlPageReg})
 				return sess
+			return None
 
 	#mode: register || cancel
 	# listClassId: danh sach ma lop mon hoc
