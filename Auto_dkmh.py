@@ -5,8 +5,8 @@ import re 	#regex
 import sys 	#input
 
 def main():
-	msv = '15020907'
-	passwd = 'deadp00l'
+	msv = ''
+	passwd = ''
 	listClassId = ['PES 1030', 'HIS1002 5', 'PHY1103 2']
 	dkmk = DkmhVnu(msv, passwd)
 	dkmk.changeClass('register', listClassId)
